@@ -1,0 +1,17 @@
+page-login-register {
+
+    .register-btn{
+        text-align: center;
+        margin:0;
+    }
+
+    .login-btn{
+        text-align: center;
+        margin: 0;
+    }
+
+    .err-msg{
+        color: map-get($colors, danger);
+        margin-left: 40%;
+    }
+}

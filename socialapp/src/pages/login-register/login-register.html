@@ -1,0 +1,80 @@
+
+<ion-header>
+
+  <ion-navbar>
+    <ion-title> Welcome To Social app </ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+  <ion-segment (ionChange)="segmentChanged($event)">
+    <ion-segment-button checked value="register">
+      <ion-label class="register-btn"> Register</ion-label>
+    </ion-segment-button>
+    <ion-segment-button  value="login">
+      <ion-label class="login-btn"> Login</ion-label>
+    </ion-segment-button>
+  </ion-segment>
+  <br>
+  <hr>
+  <div padding>
+    <form #frmLoginRegister="ngForm" (ngSubmit)="onSubmit(frmLoginRegister)">
+      <ng-container *ngIf="segmentSelect == Login">
+        <ion-item >
+          <ion-icon item-start name="mail"></ion-icon>
+          <ion-label> Email</ion-label>
+          <ion-input name="mail" type="email" ngModel required></ion-input>
+        </ion-item>
+      <div *ngIf="frmLoginRegister?.submitted && !frmLoginRegister?.controls?.mail?.valid" class="err-msg">
+        please enter mail 
+      </div>
+      <ion-item>
+        <ion-icon item-start name="key"></ion-icon>
+        <ion-label>Password</ion-label>
+        <ion-input name="password" type="password" ngModel required></ion-input>
+      </ion-item>
+      <div *ngIf="frmLoginRegister?.submitted && !frmLoginRegister?.controls?.password?.valid" class="err-msg">
+        please enter password
+      </div>
+    </ng-container>
+    <ng-container *ngIf="segmentSelect == Register">
+        <ion-item >
+            <ion-icon item-start name="contact"></ion-icon>
+            <ion-label> Name</ion-label>
+            <ion-input name="username" type="text" ngModel required></ion-input>
+          </ion-item>
+          <div *ngIf="frmLoginRegister?.submitted && !frmLoginRegister?.controls?.username?.valid" class="err-msg">
+              please enter name 
+            </div>  
+      <ion-item >
+            <ion-icon item-start name="mail"></ion-icon>
+            <ion-label> Email</ion-label>
+            <ion-input name="mail" type="email" ngModel required></ion-input>
+          </ion-item>
+          <div *ngIf="frmLoginRegister?.submitted && !frmLoginRegister?.controls?.mail?.valid" class="err-msg">
+              please enter mail 
+            </div>  
+      <ion-item>
+            <ion-icon item-start name="key"></ion-icon>
+            <ion-label>Password</ion-label>
+            <ion-input name="password" type="password" ngModel required></ion-input>
+          </ion-item>
+          <div *ngIf="frmLoginRegister?.submitted && !frmLoginRegister?.controls?.password?.valid" class="err-msg">
+              please enter password
+            </div>
+            <ion-item>
+              <ion-icon item-start name="image"></ion-icon>
+              <ion-label center>Profile Picture</ion-label>
+              <ion-input type="file"></ion-input>
+            </ion-item>
+           <div> </div>
+    </ng-container>
+      <ion-item>
+        <button type="submit" ion-button full>{{segmentSelect == Login ? "Login":"Register"}}</button>
+      </ion-item>
+    </form>
+  </div>
+    
+</ion-content>
