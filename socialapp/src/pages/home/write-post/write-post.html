@@ -1,0 +1,15 @@
+<ion-header>
+    <ion-navbar>
+      <ion-title>
+        Write Post  
+      </ion-title>
+    </ion-navbar>
+  </ion-header>
+
+  <ion-content padding>
+    <ion-label center>New Post:</ion-label>
+    <ng-container>
+      <ion-textarea [(ngModel)]="content" rows="10" placeholder="write your post here and then share it"></ion-textarea>
+      <button ion-button full (click)="sharePost()">Share</button>
+    </ng-container>
+  </ion-content>

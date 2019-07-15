@@ -1,3 +1,6 @@
 export enum EAppPages {
-    LoginRegisterPage = "LoginRegisterPage"
+    LoginRegisterPage = "LoginRegisterPage",
+    HomePage = "HomePage",
+    TabsPage = "TabsPage",
+    FriendsPage = "FriendsPage"
 }

@@ -1,0 +1,45 @@
+<!--
+  Generated template for the FriendsPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>Explore Friends</ion-title>
+    <ion-buttons end>
+      <button ion-button icon-only>
+        <ion-icon start name="person-add" ></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+  <ion-searchbar placeholder="search your friend name" (ionInput)="onSearchPage($event)"></ion-searchbar>
+</ion-header>
+
+
+<ion-content padding>
+    <ion-list [virtualScroll]="displayedfriendsList" class="item-list" >
+        <div *virtualItem="let item">
+          <ion-card>
+            <ion-card-content class="friend">
+              <div>
+                <img class="profile-img" src="./../../assets/imgs/logo.png" alt="profile-picture">
+              </div>
+              <div padding>
+                <h1>{{item.name}}</h1>
+                <button (click)="sendFriendRequest(item)" ion-button >
+                  <span  class="unsent">{{_btnText}}</span>
+                </button>
+              </div>
+            </ion-card-content>
+          </ion-card>
+        </div>
+    </ion-list>
+    <div *ngIf="displayedfriendsList.length==0 && _searchText" class="empty-list">
+      There are no friends , Acording to your search
+    </div>
+    <div *ngIf="displayedfriendsList.length==0 && !_searchText" class="empty-list">
+      There are No Friends
+    </div>
+</ion-content>

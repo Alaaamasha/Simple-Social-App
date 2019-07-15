@@ -1,17 +1,37 @@
 <ion-header>
   <ion-navbar>
     <ion-title>Home</ion-title>
+    <ion-buttons start>
+      <button ion-button (click)="logout()">
+        Logout
+      </button>
+      
+    </ion-buttons>
   </ion-navbar>
 </ion-header>
 
-<ion-content padding>
-  <h2>Welcome to Ionic!</h2>
-  <p>
-    This starter project comes with simple tabs-based layout for apps
-    that are going to primarily use a Tabbed UI.
-  </p>
-  <p>
-    Take a look at the <code>src/pages/</code> directory to add or change tabs,
-    update any existing page or create new pages.
-  </p>
+<ion-content>
+  <ion-list [virtualScroll]="friendsPostsList" class="item-list" >
+    <div *virtualItem="let item">
+      <ion-card>
+        <ion-card-content class="post">
+          <div>
+            <h1>{{item.author}}</h1>
+            <p>{{item.date}}</p>
+          </div>
+          <div>
+            <h5>{{item.content}}</h5>
+          </div>
+        </ion-card-content>
+      </ion-card>
+    </div>
+  </ion-list>
 </ion-content>
+
+<ion-footer>
+    <ion-toolbar no-padding>
+      <button (click)="openWritePostModal()" ion-button full color="primary"> 
+        Write A Post
+      </button>
+    </ion-toolbar>
+  </ion-footer>

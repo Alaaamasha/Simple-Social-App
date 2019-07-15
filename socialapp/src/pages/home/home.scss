@@ -1,3 +1,17 @@
 page-home {
-
+    .post{
+        display: flex;
+        flex-direction: column;
+        >div:first-child{
+            flex: 4;
+            >h1{
+                margin-left: 40%;
+                font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+                color: map-get($colors, primary);
+            }
+        };
+        div:last-child{
+            flex: 6
+        }
+    }
 }

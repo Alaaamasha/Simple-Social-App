@@ -25,7 +25,8 @@
         <ion-item >
           <ion-icon item-start name="mail"></ion-icon>
           <ion-label> Email</ion-label>
-          <ion-input name="mail" type="email" ngModel required></ion-input>
+          <ion-input name="mail" type="email" pattern="[A-Za-z0-9._%+-]{3,}@[a-zA-Z]{3,}([.]{1}[a-zA-Z]{2,}|[.]{1}[a-zA-Z]{2,}[.]{1}[a-zA-Z]{2,})"
+           ngModel required></ion-input>
         </ion-item>
       <div *ngIf="frmLoginRegister?.submitted && !frmLoginRegister?.controls?.mail?.valid" class="err-msg">
         please enter mail 
@@ -51,7 +52,8 @@
       <ion-item >
             <ion-icon item-start name="mail"></ion-icon>
             <ion-label> Email</ion-label>
-            <ion-input name="mail" type="email" ngModel required></ion-input>
+            <ion-input name="mail" type="email" pattern="[A-Za-z0-9._%+-]{3,}@[a-zA-Z]{3,}([.]{1}[a-zA-Z]{2,}|[.]{1}[a-zA-Z]{2,}[.]{1}[a-zA-Z]{2,})"
+             ngModel required></ion-input>
           </ion-item>
           <div *ngIf="frmLoginRegister?.submitted && !frmLoginRegister?.controls?.mail?.valid" class="err-msg">
               please enter mail 
