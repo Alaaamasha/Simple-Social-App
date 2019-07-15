@@ -54,7 +54,7 @@ export class HomePage implements OnInit {
           }
         })
       })
-      this.friendsPostsList = this.friendsPostsList.sort((a,b)=>(a.date>b.date)?1:-1)
+      this.friendsPostsList = this.friendsPostsList.sort((a,b)=>(new Date(a.date)>new Date(b.date))?1:-1)
     } catch (error) {
       
     }    
