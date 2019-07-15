@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { IonicPage, NavController, NavParams, LoadingController, Loading, ModalController } from 'ionic-angular';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { IonicPage, NavController, NavParams, LoadingController, ModalController } from 'ionic-angular';
 import { AngularFireDatabase } from '@angular/fire/database';
 import { AngularFireAuth } from '@angular/fire/auth';
 
@@ -9,13 +9,12 @@ import { AngularFireAuth } from '@angular/fire/auth';
   selector: 'page-friends',
   templateUrl: 'friends.html',
 })
-export class FriendsPage implements OnInit {
+export class FriendsPage implements OnInit , OnDestroy {
   
   _searchText: string = '';
   allFriendsList : IUser[] = [];
   displayedfriendsList : IUser[] = [];
   myfriendsList : string[] = [];
-  _btnText:string = '';
    currUser:IUserRequest = {
     email:'',
     id:'',
@@ -63,7 +62,6 @@ export class FriendsPage implements OnInit {
        .once('value',(snapshot)=>{
           let friends = snapshot.val();
           for (const key in friends) {
-             const element = friends[key];
              this.myfriendsList.push(key)
           }
       })
@@ -76,7 +74,6 @@ export class FriendsPage implements OnInit {
       })
 
       this.displayedfriendsList = this.allFriendsList;
-      this._btnText = "Send Friend Request"
     } catch (error) {
       console.error(error);
     }
@@ -112,7 +109,7 @@ export class FriendsPage implements OnInit {
                         .child("friendsRequestList")
                         .child(this.currUser.id)
                         .set(this.currUser)
-      this._btnText = "Friend Request Sent"
+      userToSent.text = "Friend Request Sent"
     } catch (err) {
       console.error(err);
     }
@@ -127,6 +124,12 @@ export class FriendsPage implements OnInit {
     modal.present();
   }
 
+  ngOnDestroy(){
+    this.allFriendsList = [];
+    this.displayedfriendsList = [];
+    this.myfriendsList = [];
+  }
+
 }
 
 export interface IUser{
@@ -134,7 +137,8 @@ export interface IUser{
   email: string,
   name: string,
   posts?: any[],
-  Notfriends?:boolean
+  Notfriends?:boolean,
+  text?:string
 }
 
 export interface  IUserRequest{

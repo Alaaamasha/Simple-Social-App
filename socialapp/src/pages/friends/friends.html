@@ -27,9 +27,12 @@
                   <h1>{{item.name}}</h1>
               </div>
               <div padding>
-                <button *ngIf="item?.Notfriends==true" (click)="sendFriendRequest(item)" ion-button >
-                  <span>{{_btnText}}</span>
+                <button *ngIf="item?.Notfriends==true && !item?.text" (click)="sendFriendRequest(item)" ion-button >
+                  <span >Send Friend Request</span>
                 </button>
+                <h2 color="secondary">
+                  {{item.text}}
+                </h2>
                 <h2 *ngIf="item?.Notfriends==false || !item.Notfriends">
                   <span> He/she is already your friend </span>
                 </h2>

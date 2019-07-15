@@ -1,5 +1,6 @@
 page-friends {
     .friend{
+        height: 125px !important;
         display: flex;
         flex-direction: column;
         justify-content: center;
@@ -10,16 +11,10 @@ page-friends {
         >div:last-child{
             display: flex;
             flex:4;
-            >button:active{
-                
+            >button:focus{                
                 background-color: green;
             }
-        }
-    }
+        };
 
-    .profile-img{
-        height: 100px;
-        width: 100px;
-        border-radius: 50px;
     }
 }

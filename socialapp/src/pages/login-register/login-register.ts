@@ -52,7 +52,11 @@ export class LoginRegisterPage implements OnInit{
               .then((user)=>{
                 this.navCtrl.setRoot(EAppPages.TabsPage)
               })
-              .catch(err => console.error(err))
+              .catch(err => {
+                console.error(err);
+                alert(err.message);
+              }
+                )
       }
       else
       {
