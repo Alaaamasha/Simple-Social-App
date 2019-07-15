@@ -66,12 +66,6 @@
           <div *ngIf="frmLoginRegister?.submitted && !frmLoginRegister?.controls?.password?.valid" class="err-msg">
               please enter password
             </div>
-            <ion-item>
-              <ion-icon item-start name="image"></ion-icon>
-              <ion-label center>Profile Picture</ion-label>
-              <ion-input type="file"></ion-input>
-            </ion-item>
-           <div> </div>
     </ng-container>
       <ion-item>
         <button type="submit" ion-button full>{{segmentSelect == Login ? "Login":"Register"}}</button>

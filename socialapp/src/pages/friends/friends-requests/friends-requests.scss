@@ -1,0 +1,16 @@
+page-friends-requests {
+    .request{
+        display: flex;
+        flex-direction: row;
+        >h1{
+            align-self: center;
+            margin-right: 10px;
+        }
+    }
+
+    .acc-rek-btns{
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around;
+    }
+}

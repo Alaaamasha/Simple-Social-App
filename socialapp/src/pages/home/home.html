@@ -5,7 +5,6 @@
       <button ion-button (click)="logout()">
         Logout
       </button>
-      
     </ion-buttons>
   </ion-navbar>
 </ion-header>
@@ -14,13 +13,14 @@
   <ion-list [virtualScroll]="friendsPostsList" class="item-list" >
     <div *virtualItem="let item">
       <ion-card>
-        <ion-card-content class="post">
+        <ion-card-content padding class="post">
           <div>
             <h1>{{item.author}}</h1>
             <p>{{item.date}}</p>
           </div>
           <div>
-            <h5>{{item.content}}</h5>
+            <p>Content :   </p>
+            <h4>{{item.content}}</h4>
           </div>
         </ion-card-content>
       </ion-card>

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { IonicPage, NavController, NavParams, LoadingController, Loading } from 'ionic-angular';
-import { AngularFireDatabase, snapshotChanges } from '@angular/fire/database';
+import { IonicPage, NavController, NavParams, LoadingController, Loading, ModalController } from 'ionic-angular';
+import { AngularFireDatabase } from '@angular/fire/database';
 import { AngularFireAuth } from '@angular/fire/auth';
 
 
@@ -14,9 +14,9 @@ export class FriendsPage implements OnInit {
   _searchText: string = '';
   allFriendsList : IUser[] = [];
   displayedfriendsList : IUser[] = [];
+  myfriendsList : string[] = [];
   _btnText:string = '';
-  _loader:Loading;
-  currUser:IUserRequest = {
+   currUser:IUserRequest = {
     email:'',
     id:'',
     name:''
@@ -26,17 +26,17 @@ export class FriendsPage implements OnInit {
               public navParams: NavParams,
               private _afDB: AngularFireDatabase,
               private _afAuth:AngularFireAuth,
-              public loadingCtlr: LoadingController) {
+              public loadingCtlr: LoadingController,
+              private _modalCtrl:ModalController) {
  
-  }
+    }
 
   async ngOnInit(){
+    let _loader = this.loadingCtlr.create({
+      content:"please waiting",
+    })
     try {
-       this._loader = await this.loadingCtlr.create({
-        content:"please waiting",
-        dismissOnPageChange:true
-      })
-      this._loader.present();
+      _loader.present();
       const currUserEmail:string = this._afAuth.auth.currentUser.uid;
       await this._afDB.database.ref('users').once('value',(snapshot) =>{
         let users = snapshot.val();
@@ -46,10 +46,8 @@ export class FriendsPage implements OnInit {
                 this.allFriendsList.push( <IUser>{
                   id :key,
                   email:value.email,
-                  friendsNumber:value.friendsNumber,
                   name:value.name,
-                  posts:value.posts,
-                  postsNumber:value.postsNumber
+                  posts:value.posts
                 })                     
               }else{
                 this.currUser = {
@@ -61,13 +59,30 @@ export class FriendsPage implements OnInit {
             
         }
       })
+      await this._afDB.database.ref('users').child(this.currUser.id).child('friendsList')
+       .once('value',(snapshot)=>{
+          let friends = snapshot.val();
+          for (const key in friends) {
+             const element = friends[key];
+             this.myfriendsList.push(key)
+          }
+      })
+      
+      this.allFriendsList.forEach(item=>{
+        let idx = this.myfriendsList.findIndex(i=>item.id==i);
+        if(idx == -1){
+          item.Notfriends = true;
+        }
+      })
+
       this.displayedfriendsList = this.allFriendsList;
       this._btnText = "Send Friend Request"
     } catch (error) {
       console.error(error);
     }
     finally{
-      this._loader.dismiss();
+      if(_loader)
+        _loader.dismiss();
     }
   
   }
@@ -82,9 +97,16 @@ export class FriendsPage implements OnInit {
     }
   }
 
+  isUserAlreadyFriend(user){
+    return this.myfriendsList.findIndex(i=>i=user.id)==-1 ? false:true;
+  }
+
   async sendFriendRequest(userToSent){
+    let _loader = this.loadingCtlr.create({
+      content:"please waiting"
+    })
     try {
-      this._loader.present();
+      _loader.present();
       await this._afDB.database.ref('users')
                         .child(userToSent.id)
                         .child("friendsRequestList")
@@ -95,22 +117,27 @@ export class FriendsPage implements OnInit {
       console.error(err);
     }
     finally{
-      this._loader.dismiss();
+      if(_loader)
+        _loader.dismiss();
     }
+  }
+
+  openFriendsRequestsList(){
+    let modal = this._modalCtrl.create('FriendsRequestsPage',{'userId':this.currUser.id});
+    modal.present();
   }
 
 }
 
-interface IUser{
+export interface IUser{
   id:string,
   email: string,
-  friendsNumber: number,
-  name: string
-  posts: any[],
-  postsNumber: number
+  name: string,
+  posts?: any[],
+  Notfriends?:boolean
 }
 
-interface IUserRequest{
+export interface  IUserRequest{
   id:string,
   name: string,
   email: string

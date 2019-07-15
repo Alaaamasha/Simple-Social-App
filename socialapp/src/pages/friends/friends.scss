@@ -1,13 +1,17 @@
 page-friends {
     .friend{
         display: flex;
-        flex-direction: row;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
         >div:first-child{
-            flex: 5;
+            flex: 4;
         };
         >div:last-child{
-            flex:8;
+            display: flex;
+            flex:4;
             >button:active{
+                
                 background-color: green;
             }
         }

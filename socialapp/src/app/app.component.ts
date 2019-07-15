@@ -12,7 +12,7 @@ import { environment } from '../environments/environment';
   templateUrl: 'app.html'
 })
 export class MyApp {
-  rootPage:any = EAppPages.TabsPage;
+  rootPage:any = EAppPages.LoginRegisterPage;
 
   constructor(platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen) {
     platform.ready().then(() => {

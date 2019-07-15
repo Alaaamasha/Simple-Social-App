@@ -2,10 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { EAppPages } from '../../../enums';
 import { NgForm } from '@angular/forms';
-import { HomePage }  from './../home/home';
-// import firebase from 'firebase'; require('firebase/auth')
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFireDatabase } from '@angular/fire/database';
+import { IUser } from '../friends/friends';
 
 
 
@@ -45,7 +44,6 @@ export class LoginRegisterPage implements OnInit{
 
 
   async onSubmit( frm:NgForm ){
-    // console.log(frm);
     let form = frm;
     if(form.valid){
       if(this.segmentSelect == ERegisterLogin.Login)
@@ -60,19 +58,19 @@ export class LoginRegisterPage implements OnInit{
       {
         await this._afAuth.auth.createUserWithEmailAndPassword(form.value.mail, form.value.password)
               .then((data)=>{
-                let user = {
+                let user = <IUser>{
                   name : form.value.username,
                   email : data.user.email,
-                  friendsNumber:0,
-                  friendsList:[],
-                  postsNumber:0,
-                  posts:[]
+                  id:data.user.uid
                 } 
                 let ref = this._afDB.database.ref('users');
                 ref.child(data.user.uid).set(user)
                 this.navCtrl.push(EAppPages.TabsPage);
               })
-              .catch(err => console.error(err))
+              .catch(err => {
+                console.error(err)
+                alert(err.message)
+              })
       }
     }
     else{
@@ -80,7 +78,6 @@ export class LoginRegisterPage implements OnInit{
     }
   }
 
-  
 }
 
 enum  ERegisterLogin{

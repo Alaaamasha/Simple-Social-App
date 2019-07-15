@@ -2,13 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { IonicPage, NavController, NavParams, ModalController, LoadingController } from 'ionic-angular';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { EAppPages } from '../../../enums';
+import { AngularFireDatabase } from '@angular/fire/database';
 
-/**
- * Generated class for the HomePage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
 
 @IonicPage()
 @Component({
@@ -17,50 +12,81 @@ import { EAppPages } from '../../../enums';
 })
 export class HomePage implements OnInit {
 
-  friendsPostsList = [
-    {author:'asd',content:' hgvjbkn 4ruihkjhgvjbkn 4ruihkjhgvjbkn 4ruihkj hgvjbkn 4ruihkj hgvjbkn 4ruihkj hgvjbkn 4ruihkj hgvjbkn 4ruihkj hgvjbkn 4ruihkj hgvjbkn 4ruihkj',date:'20/02/2019'},
-    {author:'alss',content:'i nje fjkn m42  asddasdas hjkbhkkkkkkkkkkkkk jhbkn gvhbjknm',date:'20/52/2019'},
-    {author:'asrdv ',content:'sfdghhhhhhhhhhhhh ',date:'60/02/2019'},
-    {author:'asrdv ',content:'sfdghhhhhhhhhhhhh ',date:'60/02/2019'},
-  ]
-
-  currentUser : any;
+  friendsPostsList :IPost[]=[];
+  currentUserId : string;
 
   constructor(public navCtrl: NavController,
               public navParams: NavParams,
               private _modalCtrl: ModalController,
               private _afAuth:AngularFireAuth,
-              public loadingCtlr: LoadingController) {
+              public loadingCtlr: LoadingController,
+              private _afDB: AngularFireDatabase,) {
   }
 
   async ngOnInit() {
-   this.currentUser = this._afAuth.auth.currentUser ;
-
-  }
-
-   openWritePostModal(){
-    let modal = this._modalCtrl.create('WritePostPage',{'user':this.currentUser});
-    modal.present();
-  }
-
-  async logout(){
-    const loading = await this.loadingCtlr.create({
+    const _loader = await this.loadingCtlr.create({
       content:"please waiting",
       dismissOnPageChange:true
     })
     try {
-      loading.present();
+      _loader.dismiss()
+      this.currentUserId = this._afAuth.auth.currentUser.uid ;
+      let friendsList = []
+      await this._afDB.database.ref('users').child(this.currentUserId).child('friendsList')
+      .once('value',(snapshot)=>{
+        if(snapshot.val()){
+          let list = snapshot.val();
+          for(let key in list) {
+            const value = list[key];
+            friendsList.push(value.id);
+          }
+        }
+      })
+      await friendsList.forEach(element=>{
+         this._afDB.database.ref('users').child(element).child('posts')
+        .once('value',(snapshot)=>{
+          if(snapshot.val()){
+            let list = snapshot.val();
+            for(let key in list){
+              const value = list[key];
+              this.friendsPostsList.push(value);
+            }
+          }
+        })
+      })
+      this.friendsPostsList = this.friendsPostsList.sort((a,b)=>(a.date>b.date)?1:-1)
+    } catch (error) {
+      
+    }    
+  }
+
+   openWritePostModal(){
+    let modal = this._modalCtrl.create('WritePostPage',{'userId':this.currentUserId});
+    modal.present();
+  }
+
+  async logout(){
+    const _loader = await this.loadingCtlr.create({
+      content:"please waiting"
+    })
+    try {
+      _loader.present();
       await this._afAuth.auth.signOut();
     } catch (error) {
       console.error(error);
     }
     finally{
       this.navCtrl.setRoot(EAppPages.LoginRegisterPage);
-      loading.dismiss();
+      _loader.dismiss();
     }
   }
 
   }
 
+  export interface IPost{
+    author:string,
+    content:string,
+    date:string
+  }
 
 

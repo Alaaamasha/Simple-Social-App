@@ -9,7 +9,7 @@
   <ion-navbar>
     <ion-title>Explore Friends</ion-title>
     <ion-buttons end>
-      <button ion-button icon-only>
+      <button ion-button icon-only (click)="openFriendsRequestsList()">
         <ion-icon start name="person-add" ></ion-icon>
       </button>
     </ion-buttons>
@@ -24,13 +24,15 @@
           <ion-card>
             <ion-card-content class="friend">
               <div>
-                <img class="profile-img" src="./../../assets/imgs/logo.png" alt="profile-picture">
+                  <h1>{{item.name}}</h1>
               </div>
               <div padding>
-                <h1>{{item.name}}</h1>
-                <button (click)="sendFriendRequest(item)" ion-button >
-                  <span  class="unsent">{{_btnText}}</span>
+                <button *ngIf="item?.Notfriends==true" (click)="sendFriendRequest(item)" ion-button >
+                  <span>{{_btnText}}</span>
                 </button>
+                <h2 *ngIf="item?.Notfriends==false || !item.Notfriends">
+                  <span> He/she is already your friend </span>
+                </h2>
               </div>
             </ion-card-content>
           </ion-card>
@@ -38,8 +40,5 @@
     </ion-list>
     <div *ngIf="displayedfriendsList.length==0 && _searchText" class="empty-list">
       There are no friends , Acording to your search
-    </div>
-    <div *ngIf="displayedfriendsList.length==0 && !_searchText" class="empty-list">
-      There are No Friends
     </div>
 </ion-content>
